@@ -1,7 +1,7 @@
 # Stage 1: Build Frontend (Astro)
 FROM oven/bun:1 AS frontend-builder
 WORKDIR /app
-COPY web/package.json web/bun.lockb ./web/
+COPY web/package.json web/bun.lock ./web/
 WORKDIR /app/web
 RUN bun install --frozen-lockfile
 COPY web/ .
