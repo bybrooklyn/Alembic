@@ -9,6 +9,7 @@ use axum::{
 };
 use rust_embed::RustEmbed;
 use std::net::SocketAddr;
+use std::sync::Arc;
 use tokio::time::{interval, Duration};
 use tower_http::cors::CorsLayer;
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
@@ -77,7 +78,7 @@ async fn main() -> anyhow::Result<()> {
     // 3. Configure Rate Limiting
     // 30 requests per minute = 1 request every 2 seconds.
     // Burst size = 10.
-    let governor_conf = Box::new(
+    let governor_conf = Arc::new(
         GovernorConfigBuilder::default()
             .period(Duration::from_secs(2)) // 1 request every 2 seconds = 30 req/min
             .burst_size(10)
@@ -95,7 +96,7 @@ async fn main() -> anyhow::Result<()> {
         .layer(CorsLayer::permissive())
         .layer(DefaultBodyLimit::max(16384)) // 16KB Max Body
         .layer(GovernorLayer {
-            config: Box::leak(governor_conf),
+            config: governor_conf,
         })
         .route("/health", get(|| async { "OK" }))
         // Static Assets (Fallback)

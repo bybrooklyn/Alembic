@@ -63,8 +63,8 @@ pub async fn get_insights(
     Ok(Json(StatsResponse {
         schema: 1,
         coverage: Coverage {
-            total_jobs: coverage.total_jobs.unwrap_or(0),
-            unique_hardware: coverage.unique_hardware.unwrap_or(0),
+            total_jobs: coverage.total_jobs.unwrap_or(0).into(),
+            unique_hardware: coverage.unique_hardware.unwrap_or(0).into(),
         },
         leaderboard,
         stability,
