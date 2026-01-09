@@ -1,0 +1,13 @@
+[package]
+name = "alembic-ingest"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+alembic-core = { workspace = true }
+axum = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+tracing = { workspace = true }
+ulid = { workspace = true }
+sqlx = { workspace = true }

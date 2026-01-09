@@ -1,0 +1,12 @@
+services:
+  alembic:
+    build: .
+    image: alembic:latest
+    container_name: alembic
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+    environment:
+      - RUST_LOG=info

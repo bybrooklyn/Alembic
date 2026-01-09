@@ -1,0 +1,7 @@
+/.DS_Store
+/alembic.db-shm
+/alembic.db-wal
+
+/target
+web/dist
+web/node_modules

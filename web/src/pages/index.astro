@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Dashboard } from '../components/Dashboard';
+---
+
+<Layout title="Alembic Telemetry">
+	<main class="app-main p-8 max-w-7xl mx-auto">
+		<header class="mb-12">
+			<h1 class="text-4xl font-bold text-helios-ink mb-2">Alembic</h1>
+			<p class="text-helios-ink-muted">Reference Telemetry & Stats</p>
+		</header>
+		
+		<Dashboard client:load />
+	</main>
+</Layout>

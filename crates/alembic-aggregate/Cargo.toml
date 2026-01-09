@@ -1,0 +1,10 @@
+[package]
+name = "alembic-aggregate"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+alembic-core = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+sqlx = { workspace = true }

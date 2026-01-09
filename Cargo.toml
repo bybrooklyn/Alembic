@@ -1,0 +1,29 @@
+[workspace]
+members = [
+    "crates/alembic-core",
+    "crates/alembic-ingest",
+    "crates/alembic-aggregate",
+    "crates/alembic-api",
+    "crates/alembic-server",
+]
+resolver = "2"
+
+[workspace.dependencies]
+axum = "0.7"
+tokio = { version = "1.36", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sqlx = { version = "0.7", features = ["runtime-tokio-rustls", "sqlite"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["trace", "cors"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "1.0"
+ulid = "1.1"
+rust-embed = "8.2"
+
+# Internal crates
+alembic-core = { path = "crates/alembic-core" }
+alembic-ingest = { path = "crates/alembic-ingest" }
+alembic-aggregate = { path = "crates/alembic-aggregate" }
+alembic-api = { path = "crates/alembic-api" }
