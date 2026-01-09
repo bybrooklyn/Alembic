@@ -8,7 +8,7 @@ Unlike traditional stats dashboards which focus on vanity metrics ("Total Events
 
 ---
 
-## 🛡️ Data Trust & Privacy
+##  Data Trust & Privacy
 Alembic is built on a foundation of absolute anonymity. We believe infrastructure tools should be boring and trustworthy.
 
 *   **What we collect**: Hardware Model (e.g., "Intel Arc A380"), Encoder Settings (e.g., "av1_qsv"), Duration, Input/Output Size, Status (Success/Fail).
@@ -17,7 +17,7 @@ Alembic is built on a foundation of absolute anonymity. We believe infrastructur
 
 ---
 
-## 🏗️ Architecture
+##  Architecture
 
 Alembic is a high-performance, single-binary application.
 
@@ -37,7 +37,7 @@ A static SPA bundled directly into the Rust binary.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 *   **Rust** (latest stable)
@@ -80,7 +80,7 @@ A static SPA bundled directly into the Rust binary.
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 ### Ingest
 `POST /v1/event`
@@ -119,7 +119,7 @@ Get the Efficiency Leaderboard and Stability Report.
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Alembic is open source (MIT). We welcome contributions that improve data accuracy, add new comparison dimensions, or enhance the dashboard's "Argument Engine" capabilities.
 
