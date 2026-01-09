@@ -1,9 +1,8 @@
 use alembic_core::Db;
 use axum::{
-    body::Body,
-    extract::{Path, DefaultBodyLimit},
-    http::{header, HeaderValue, StatusCode, Uri},
-    response::{IntoResponse, Response},
+    extract::DefaultBodyLimit,
+    http::{header, StatusCode, Uri},
+    response::IntoResponse,
     routing::get,
     Router,
 };

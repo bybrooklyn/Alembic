@@ -6,9 +6,12 @@ pub async fn run_aggregation(db: &Db) -> Result<(), DbError> {
 
     // 1. Efficiency Stats (The Leaderboard)
     // Clear old comparisons for MVP simplicity
-    sqlx::query("DELETE FROM efficiency_stats").execute(&db.pool).await.map_err(|e| DbError::Connection(e))?;
+    sqlx::query("DELETE FROM efficiency_stats")
+        .execute(&db.pool)
+        .await
+        .map_err(|e| DbError::Connection(e))?;
 
-    let _ = sqlx::query!(
+    sqlx::query(
         r#"
         INSERT INTO efficiency_stats (
             hardware_model, encoder, video_codec, resolution,
@@ -37,9 +40,12 @@ pub async fn run_aggregation(db: &Db) -> Result<(), DbError> {
     .map_err(|e| DbError::Connection(e))?;
 
     // 2. Stability Stats (The Failure Report)
-    sqlx::query("DELETE FROM stability_stats").execute(&db.pool).await.map_err(|e| DbError::Connection(e))?;
+    sqlx::query("DELETE FROM stability_stats")
+        .execute(&db.pool)
+        .await
+        .map_err(|e| DbError::Connection(e))?;
 
-    let _ = sqlx::query!(
+    sqlx::query(
         r#"
         INSERT INTO stability_stats (encoder, error_type, count)
         SELECT 
@@ -51,7 +57,7 @@ pub async fn run_aggregation(db: &Db) -> Result<(), DbError> {
           AND failure_reason IS NOT NULL
           AND encoder IS NOT NULL
         GROUP BY encoder, failure_reason
-        "#
+        "#,
     )
     .execute(&db.pool)
     .await

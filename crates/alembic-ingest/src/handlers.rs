@@ -1,16 +1,15 @@
-use axum::{extract::State, http::StatusCode, Json};
-use alembic_core::Db;
 use crate::models::IngestEvent;
+use alembic_core::Db;
+use axum::{extract::State, http::StatusCode, Json};
 use ulid::Ulid;
 
 pub async fn ingest_event(
     State(db): State<Db>,
     Json(payload): Json<IngestEvent>,
 ) -> Result<StatusCode, StatusCode> {
-    
     let id = Ulid::new().to_string();
-    
-    sqlx::query!(
+
+    sqlx::query(
         r#"
         INSERT INTO raw_events (
             id, created_at, app_version, 
@@ -21,20 +20,20 @@ pub async fn ingest_event(
         )
         VALUES (?, datetime('now'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         "#,
-        id,
-        payload.app_version,
-        payload.event_type,
-        payload.status,
-        payload.failure_reason,
-        payload.hardware_model,
-        payload.encoder,
-        payload.duration_ms,
-        payload.input_size_bytes,
-        payload.output_size_bytes,
-        payload.speed_factor,
-        payload.video_codec,
-        payload.resolution
     )
+    .bind(&id)
+    .bind(&payload.app_version)
+    .bind(&payload.event_type)
+    .bind(&payload.status)
+    .bind(&payload.failure_reason)
+    .bind(&payload.hardware_model)
+    .bind(&payload.encoder)
+    .bind(&payload.duration_ms)
+    .bind(&payload.input_size_bytes)
+    .bind(&payload.output_size_bytes)
+    .bind(&payload.speed_factor)
+    .bind(&payload.video_codec)
+    .bind(&payload.resolution)
     .execute(&db.pool)
     .await
     .map_err(|e| {
