@@ -9,7 +9,7 @@ use axum::{
 use rust_embed::RustEmbed;
 use std::net::SocketAddr;
 use std::sync::Arc;
-use tokio::time::{interval, Duration};
+use tokio::time::interval;
 use tower_http::cors::CorsLayer;
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
 use tracing::{info, error};
@@ -50,22 +50,25 @@ async fn static_handler(uri: Uri) -> impl IntoResponse {
 async fn main() -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
-    info!("Starting Alembic...");
+    // 0. Load Config
+    let config = alembic_core::Config::from_env();
+    info!("Starting Alembic on {}...", config.socket_addr());
 
     // 1. Initialize DB
-    let db_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite:alembic.db".to_string());
-    let db = Db::new(&db_url).await?;
+    let db = Db::new(&config.database_url).await?;
     db.migrate().await?;
 
     // 2. Start Aggregation Worker
     let db_clone = db.clone();
+    let interval_duration = config.aggregation_interval;
+    
     tokio::spawn(async move {
         // Initial Aggregation on startup
         if let Err(e) = alembic_aggregate::run_aggregation(&db_clone).await {
              error!("Initial aggregation failed: {}", e);
         }
 
-        let mut interval = interval(Duration::from_secs(60));
+        let mut interval = interval(interval_duration);
         loop {
             interval.tick().await;
             if let Err(e) = alembic_aggregate::run_aggregation(&db_clone).await {
@@ -75,12 +78,10 @@ async fn main() -> anyhow::Result<()> {
     });
 
     // 3. Configure Rate Limiting
-    // 30 requests per minute = 1 request every 2 seconds.
-    // Burst size = 10.
     let governor_conf = Arc::new(
         GovernorConfigBuilder::default()
-            .period(Duration::from_secs(2)) // 1 request every 2 seconds = 30 req/min
-            .burst_size(10)
+            .period(config.rate_limit_period())
+            .burst_size(config.rate_limit_burst)
             .finish()
             .unwrap(),
     );
@@ -102,7 +103,7 @@ async fn main() -> anyhow::Result<()> {
         .fallback(static_handler);
 
     // 5. Start Server
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = config.socket_addr();
     info!("Listening on {}", addr);
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app.into_make_service_with_connect_info::<SocketAddr>()).await?;
