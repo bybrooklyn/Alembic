@@ -11,7 +11,7 @@ Unlike traditional stats dashboards which focus on vanity metrics ("Total Events
 ##  Data Trust & Privacy
 Alembic is built on a foundation of absolute anonymity. We believe infrastructure tools should be boring and trustworthy.
 
-*   **What we collect**: Hardware Model (e.g., "Intel Arc A380"), Encoder Settings (e.g., "av1_qsv"), Duration, Input/Output Size, Status (Success/Fail).
+*   **What we collect**: Hardware Model (e.g., "RTX 3070 TI, Ryzen 5 9700X"), Encoder Settings (e.g., "av1_nvenc, av1_qsv"), Duration, Size Reduction %, Status (Success/Fail).
 *   **What we DO NOT collect**: IP Addresses, Filenames, File Paths, Media Titles, User IDs, Persistent Session IDs.
 *   **Storage**: Data is stored in a local SQLite database (`alembic.db`). You control it. You can inspect it. You can delete it.
 
@@ -48,7 +48,7 @@ A static SPA bundled directly into the Rust binary.
 
 1.  **Clone the repository**
     ```bash
-    git clone https://github.com/project/alembic.git
+    git clone https://github.com/bybrooklyn/alembic.git
     cd alembic
     ```
 
