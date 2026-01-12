@@ -167,7 +167,7 @@
     }
 
     .app-main {
-        @apply flex-1 flex flex-col h-full bg-helios-main min-w-0;
+        @apply flex-1 flex flex-col h-full min-w-0 bg-helios-panel/40 border border-helios-border/60 rounded-sm;
     }
 
     /* Add other utility classes from Helios as needed */

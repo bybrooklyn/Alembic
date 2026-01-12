@@ -4,10 +4,14 @@ import StatsCharts from "../components/StatsCharts";
 ---
 
 <Layout title="Statistics | Alchemist">
-    <div class="content-header">
-        <h1 class="page-title">Statistics</h1>
-        <p class="page-subtitle">Encoding performance and space savings</p>
-    </div>
+    <main class="app-main p-8 max-w-7xl mx-auto">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-helios-ink mb-2">Statistics</h1>
+            <p class="text-helios-ink-muted">
+                Encoding performance and space savings
+            </p>
+        </div>
 
-    <StatsCharts client:load />
+        <StatsCharts client:load />
+    </main>
 </Layout>
