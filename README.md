@@ -4,7 +4,7 @@
 
 It exists to answer one question: **"What is the best way to transcode video?"**
 
-Unlike traditional stats dashboards which focus on vanity metrics ("Total Events"), Alembic focuses entirely on **Efficiency** and **Stability**. It aggregates anonymous performance data from thousands of [Alchemist](https://github.com/brooklynloveszelda/alchemist) nodes to build a transparent, defensible leaderboard of hardware and software encoders.
+Unlike traditional stats dashboards which focus on vanity metrics ("Total Events"), Alembic focuses entirely on **Efficiency** and **Stability**. It aggregates anonymous performance data from thousands of [Alchemist](https://github.com/bybrooklyn/alchemist) nodes to build a transparent, defensible leaderboard of hardware and software encoders.
 
 ---
 
