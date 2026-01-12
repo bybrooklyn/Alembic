@@ -82,11 +82,20 @@ A static SPA bundled directly into the Rust binary.
 
 ##  API Reference
 
+### Base URL
+Local development uses `http://localhost:3000`. The API is mounted under `/api` for read-only endpoints and `/v1` for ingest.
+
+### Health
+`GET /health`
+Returns `OK` when the server is up.
+
 ### Ingest
 `POST /v1/event`
-Submit a telemetry event.
-*   **Rate Limit**: 30 requests/minute per IP.
-*   **Payload**: Max 16KB.
+Submit a telemetry event for aggregation.
+*   **Rate Limit**: Configurable via `ALEMBIC_RATE_LIMIT_PER_MIN` (default 30/min) and `ALEMBIC_RATE_LIMIT_BURST` (default 10).
+*   **Payload**: JSON, max 16KB.
+*   **Response**: `202 Accepted` on success.
+*   **Errors**: `429 Too Many Requests` when rate limited, `413 Payload Too Large` when over the size limit.
 
 ```json
 {
@@ -104,9 +113,24 @@ Submit a telemetry event.
 }
 ```
 
+Fields:
+*   `app_version` (string, required): Version of the client submitting the event.
+*   `event_type` (string, required): `job_started` or `job_finished`.
+*   `status` (string, optional): `success` or `failure`.
+*   `failure_reason` (string, optional): Free-form error category when `status` is `failure`.
+*   `hardware_model` (string, optional): GPU/CPU model label.
+*   `encoder` (string, optional): Encoder key, e.g. `av1_qsv`, `hevc_nvenc`.
+*   `duration_ms` (number, optional): Encode duration in milliseconds.
+*   `input_size_bytes` (number, optional): Input size in bytes.
+*   `output_size_bytes` (number, optional): Output size in bytes.
+*   `speed_factor` (number, optional): Relative speed multiplier (higher is faster).
+*   `video_codec` (string, optional): Output codec identifier, e.g. `av1`.
+*   `resolution` (string, optional): Output resolution, e.g. `1080p`.
+
 ### Insights
 `GET /api/v1/stats/insights`
-Get the Efficiency Leaderboard and Stability Report.
+Get the efficiency leaderboard and stability report.
+*   **Response**: `200 OK` with aggregated stats.
 
 ```json
 {
@@ -117,6 +141,21 @@ Get the Efficiency Leaderboard and Stability Report.
 }
 ```
 
+Response details:
+*   `coverage.total_jobs`: Count of ingested jobs.
+*   `coverage.unique_hardware`: Distinct hardware models seen.
+*   `leaderboard[]`: Up to 50 entries ordered by `speed` desc.
+*   `leaderboard[].hardware`: Hardware model.
+*   `leaderboard[].encoder`: Encoder name.
+*   `leaderboard[].codec`: Output codec.
+*   `leaderboard[].res`: Resolution bucket.
+*   `leaderboard[].speed`: Average speed factor.
+*   `leaderboard[].reduction`: Average size reduction percent.
+*   `leaderboard[].samples`: Sample count for the entry.
+*   `stability[]`: Up to 20 entries ordered by `count` desc.
+*   `stability[].encoder`: Encoder name.
+*   `stability[].error`: Error category.
+*   `stability[].count`: Occurrence count.
 ---
 
 ##  Contributing

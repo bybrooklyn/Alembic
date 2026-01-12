@@ -12,7 +12,8 @@ use std::sync::Arc;
 use tokio::time::interval;
 use tower_http::cors::CorsLayer;
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
-use tracing::{info, error};
+use tracing::{error, info};
+use tracing_subscriber::EnvFilter;
 
 #[derive(RustEmbed)]
 #[folder = "../../web/dist"]
@@ -48,7 +49,10 @@ async fn static_handler(uri: Uri) -> impl IntoResponse {
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    tracing_subscriber::fmt::init();
+    let env_filter = EnvFilter::try_from_default_env()
+        .or_else(|_| EnvFilter::try_new("info"))
+        .unwrap();
+    tracing_subscriber::fmt().with_env_filter(env_filter).init();
 
     // 0. Load Config
     let config = alembic_core::Config::from_env();
